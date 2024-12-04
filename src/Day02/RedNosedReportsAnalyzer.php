@@ -6,6 +6,7 @@ class RedNosedReportsAnalyzer
 {
     public function isSafeReport(array $report): bool
     {
+        $report = array_values($report);
         $isIncreasing = $report[0] < $report[1];
 
         $reportIsSafe = true;
