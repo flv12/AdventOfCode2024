@@ -18,24 +18,27 @@ class PatternFinder
         $patternCount = 0;
         $patternLength = strlen($this->patternToFind);
 
-        for ($i = 0; $i < $rowCount; $i++) {
-            for ($j = 0; $j < $columnCount; $j++) {
-                if (substr($lines[$i], $j, $patternLength) === $this->patternToFind) {
+
+        // HORISONTAL PATTERN SEARCH
+        for ($row = 0; $row < $rowCount; $row++) {
+            for ($column = 0; $column < $columnCount; $column++) {
+                if (substr($lines[$row], $column, $patternLength) === $this->patternToFind) {
                     $patternCount++;
                 }
 
-                if (substr(strrev($lines[$i]), $j, $patternLength) === $this->patternToFind) {
+                if (substr(strrev($lines[$row]), $column, $patternLength) === $this->patternToFind) {
                     $patternCount++;
                 }
             }
         }
 
-        for ($k = 0; $k < $columnCount; $k++) {
-            for ($l = 0; $l < $rowCount; $l++) {
+        // VERTICAL PATTERN SEARCH
+        for ($column = 0; $column < $columnCount; $column++) {
+            for ($row = 0; $row < $rowCount; $row++) {
                 $verticalPattern = '';
 
                 for ($m = 0; $m < $patternLength; $m++) {
-                    $verticalPattern .= $lines[$l + $m][$k];
+                    $verticalPattern .= $lines[$row + $m][$column];
                 }
 
                 if ($verticalPattern === $this->patternToFind) {
@@ -43,6 +46,33 @@ class PatternFinder
                 }
 
                 if ($verticalPattern === strrev($this->patternToFind)) {
+                    $patternCount++;
+                }
+            }
+        }
+
+        // DIAGONAL PATTERN SEARCH
+        for ($row = 0; $row <= $rowCount - $patternLength; $row++) {
+            for ($column = 0; $column <= $columnCount - $patternLength; $column++) {
+                $diagPattern1 = $diagPattern2 = $diagPattern3 = $diagPattern4 = '';
+
+                for ($i = 0; $i < $patternLength; $i++) {
+                    $diagPattern1 .= $llnes[$row + $i][$column + $i];
+                    $diagPattern2 .= $lines[$row + $i][$column + $patternLength - $i - 1];
+                    $diagPattern3 .= $lines[$row + $patternLength - $i - 1][$column + $i];
+                    $diagPattern4 .= $lines[$row + $patternLength - $i - 1][$column + $patternLength - $i - 1];
+                }
+
+                if ($diagPattern1 === $this->patternToFind) {
+                    $patternCount++;
+                }
+                if ($diagPattern2 === $this->patternToFind) {
+                    $patternCount++;
+                }
+                if ($diagPattern3 === $this->patternToFind) {
+                    $patternCount++;
+                }
+                if ($diagPattern4 === $this->patternToFind) {
                     $patternCount++;
                 }
             }
